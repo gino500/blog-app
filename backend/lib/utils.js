@@ -2,15 +2,17 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const path = require("path");
 
+// Private RSA Key
 const pathToKey = path.join(__dirname, "..", "id_rsa_priv.pem");
 const PRIV_KEY = fs.readFileSync(pathToKey, "utf8");
 
-// Arg received ONLY from User Login
+// user param only from USER LOGIN / NOT sign-up
 function issueJWT(user) {
+  const _id = user._id;
   const expiresIn = "1d";
 
   const payload = {
-    id: user._id,
+    sub: _id,
     iat: Date.now(),
   };
 
