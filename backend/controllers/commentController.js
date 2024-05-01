@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const utils = require("../lib/utils");
+const { validationResult } = require("express-validator");
 
 // Models
 const Blog = require("../models/blogs");
@@ -33,6 +34,12 @@ exports.comment_create_post = asyncHandler(async (req, res, next) => {
       blog: req.params.blogid,
       text: req.body.text,
     });
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
     await comment.save();
     await Blog.findByIdAndUpdate(
       req.params.blogid,

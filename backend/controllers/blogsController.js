@@ -1,4 +1,7 @@
 const asyncHandler = require("express-async-handler");
+const { validationResult } = require("express-validator");
+
+// Models
 const Blog = require("../models/blogs");
 
 // GET all blogs
@@ -19,6 +22,12 @@ exports.blog_create_post = asyncHandler(async (req, res, next) => {
       title: req.body.title,
       text: req.body.text,
     });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(422).json({ errors: errors.array() });
+      return;
+    }
+
     if (await blog.save()) {
       res.status(200).json({
         success: true,
