@@ -8,7 +8,14 @@ const User = require("../models/users");
 
 exports.user_list_get = asyncHandler(async (req, res, next) => {
   const users = await User.find({}, "user").sort({ user: 1 });
+
   res.json({ users });
+});
+
+exports.user_detail_get = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  res.json({ _id: user._id, user: user.user });
 });
 
 exports.user_login_post = asyncHandler(async (req, res, next) => {
@@ -18,18 +25,22 @@ exports.user_login_post = asyncHandler(async (req, res, next) => {
     return;
   }
 
-  const user = await User.findOne({ user: req.body.user });
+  const validPassword = await User.findOne({ user: req.body.user }).select(
+    "password"
+  );
+
+  const user = await User.findOne({ user: req.body.user }).select("_id user");
+
   if (!user) {
     return res.status(401).json({
       success: false,
       message: "User not found",
     });
   }
-  const match = await bcrypt.compare(req.body.password, user.password);
+  const match = await bcrypt.compare(req.body.password, validPassword.password);
   if (match) {
-    const jwt = utils.issueJWT(user);
+    const jwt = utils.issueJWT(res, user);
     return res.status(200).json({
-      success: true,
       user: user,
       token: jwt.token,
       expiresIn: jwt.expiresIn,
@@ -41,6 +52,14 @@ exports.user_login_post = asyncHandler(async (req, res, next) => {
       message: "Incorrect password",
     });
   }
+});
+
+exports.user_logout_post = asyncHandler(async (req, res, next) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  res.status(200).json({ message: "Logged out successfully" });
 });
 
 exports.user_create_post = asyncHandler(async (req, res, next) => {
@@ -60,7 +79,7 @@ exports.user_create_post = asyncHandler(async (req, res, next) => {
       if (err) return err;
       else {
         user.password = hashedPassword;
-        // await user.save();
+        await user.save();
         res.status(200).json({
           message: "Success: User Created",
           user: {
@@ -71,6 +90,9 @@ exports.user_create_post = asyncHandler(async (req, res, next) => {
       }
     });
   } catch (err) {
+    res.json({
+      message: err,
+    });
     return next(err);
   }
 });

@@ -1,0 +1,12 @@
+{
+  "cSpell.words": ["reduxjs", "Signup", "tailwindcss", "toastify"],
+  "tailwindCSS.includeLanguages": {
+    "javascript": "javascript"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  }
+}

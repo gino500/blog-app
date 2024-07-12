@@ -1,4 +1,5 @@
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const createError = require("http-errors");
 const express = require("express");
 const logger = require("morgan");
@@ -30,7 +31,15 @@ app.use(passport.initialize());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "*",
+    methods: "GET,POST,PUT, PATCH,DELETE,HEAD",
+    preflightContinue: false,
+    optionsSuccessError: 204,
+  })
+);
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes

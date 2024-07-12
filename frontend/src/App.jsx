@@ -1,9 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import Header from "./components/Header";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 import { Outlet } from "react-router-dom";
-import api from "./api/users";
+import Footing from "./components/Footer";
 
 const App = () => {
-  return <div>Blogs</div>;
+  return (
+    <div className="h-screen w-screen bg-[#181818] overflow-scroll">
+      <Header />
+      <ToastContainer />
+      <Outlet />
+      <Footing />
+    </div>
+  );
 };
 
 export default App;

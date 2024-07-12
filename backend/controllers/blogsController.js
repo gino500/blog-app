@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 
 // Models
 const Blog = require("../models/blogs");
+const { text } = require("express");
 
 // GET all blogs
 exports.blog_list_get = asyncHandler(async (req, res, next) => {
@@ -19,6 +20,7 @@ exports.blog_create_post = asyncHandler(async (req, res, next) => {
   try {
     const blog = new Blog({
       user: req.user.id,
+      image: req.body.image,
       title: req.body.title,
       text: req.body.text,
     });
@@ -53,9 +55,13 @@ exports.blog_detail_get = asyncHandler(async (req, res, next) => {
 
 // PUT update a blog
 exports.blog_update_patch = asyncHandler(async (req, res, next) => {
-  const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    req.params.blogid,
+    req.body,
+    {
+      new: true,
+    }
+  );
 
   res.json({
     success: true,
@@ -66,7 +72,7 @@ exports.blog_update_patch = asyncHandler(async (req, res, next) => {
 
 // DELETE a blog
 exports.blog_delete_post = asyncHandler(async (req, res, next) => {
-  const deleteBlog = await Blog.findByIdAndDelete(req.params.id);
+  const deleteBlog = await Blog.findByIdAndDelete(req.params.blogid);
 
   res.json({
     success: true,
