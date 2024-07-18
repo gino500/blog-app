@@ -2,9 +2,7 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const path = require("path");
 
-// Private RSA Key
-const pathToKey = path.join(__dirname, "..", "id_rsa_priv.pem");
-const PRIV_KEY = fs.readFileSync(pathToKey, "utf8");
+const PRIV_KEY = process.env.JWT_PRIVATE_KEY;
 
 // user param only from USER LOGIN / NOT sign-up
 function issueJWT(res, user) {
@@ -15,6 +13,7 @@ function issueJWT(res, user) {
     sub: _id,
     iat: Date.now(),
   };
+  console.log(PRIV_KEY);
 
   const signedToken = jwt.sign(payload, PRIV_KEY, {
     expiresIn: expiresIn,
@@ -23,7 +22,7 @@ function issueJWT(res, user) {
 
   res.cookie("jwt", signedToken, {
     httpOnly: true,
-    secure: process.env.MONGODB_PROD !== "development",
+    secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge: 1 * 24 * 60 * 60 * 1000,
   });
