@@ -1,8 +1,7 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 
-const devConnection = process.env.MONGODB_DEV;
-const prodConnection = process.env.MONGODB_PROD;
+const mongodb = process.env.MONGODB_URI;
 
 // Set up mongoose connection
 mongoose.set("strictQuery", false);
@@ -11,10 +10,10 @@ main().catch(err => console.log(err));
 async function main() {
   // Connect to the correct environment database
   if (process.env.NODE_ENV === "production") {
-    await mongoose.connect(prodConnection);
-    if (mongoose.STATES.connected) console.log("PROD Database connected");
+    await mongoose.connect(mongodb);
+    if (mongoose.STATES.connected) console.log("PROD DB connected");
   } else {
-    await mongoose.connect(devConnection);
-    if (mongoose.STATES.connected) console.log("DEV Database connected");
+    await mongoose.connect(mongodb);
+    if (mongoose.STATES.connected) console.log("DEV DB connected");
   }
 }

@@ -5,6 +5,7 @@ const express = require("express");
 const logger = require("morgan");
 const passport = require("passport");
 const path = require("path");
+
 // .env
 require("dotenv").config();
 
@@ -35,17 +36,30 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: "*",
-    methods: "GET,POST,PUT, PATCH,DELETE,HEAD",
+    methods: "GET,POST,PUT,PATCH,DELETE,HEAD",
     preflightContinue: false,
     optionsSuccessError: 204,
   })
 );
-app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
 app.use("/api", indexRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/blogs", blogsRouter);
+
+if (process.env.NODE_ENV === "production") {
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname, "frontend/dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  });
+
+  app.get("/", (req, res) => res.send("Server is Ready"));
+} else {
+  app.get("/", (req, res) => res.send("Server is Ready"));
+}
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
