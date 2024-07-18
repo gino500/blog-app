@@ -20,4 +20,4 @@ function genKeyPair() {
 
 genKeyPair();
 
-// CMD - node generateKeypair
+// COMMAND - node generateKeypair
