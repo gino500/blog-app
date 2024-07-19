@@ -10,13 +10,13 @@ export default defineConfig({
     },
   },
   plugins: [react()],
-  server: {
-    port: 8080,
-    proxy: {
-      "/api": {
-        target: "blog-app-production-e2db.up.railway.app",
-        changeOrigin: true,
-      },
-    },
-  },
+  // server: {
+  //   port: 3000,
+  //   proxy: {
+  //     "/api": {
+  //       target: "http://localhost:5000",
+  //       changeOrigin: true,
+  //     },
+  //   },
+  // },
 });
