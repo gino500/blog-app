@@ -10,13 +10,13 @@ export default defineConfig({
     },
   },
   plugins: [react()],
-  // server: {
-  //   port: 3000,
-  //   proxy: {
-  //     "/api": {
-  //       target: "http://localhost:5000",
-  //       changeOrigin: true,
-  //     },
-  //   },
-  // },
+  server: {
+    port: process.env.PORT || 8080,
+    proxy: {
+      "/api": {
+        target: "blog-app-production-0294.up.railway.app",
+        changeOrigin: true,
+      },
+    },
+  },
 });
