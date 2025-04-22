@@ -34,17 +34,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 // app.use(cors());
-app.use(
-  cors({
-    origin: "*",
-    origin: [
-      "http://localhost:3001",
-      "http://localhost:8080",
-      "https://content-charm-production.up.railway.app/",
-    ],
-    methods: "GET,POST,PUT,PATCH,DELETE,HEAD",
-  })
-);
+app.use(cors());
 // app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
