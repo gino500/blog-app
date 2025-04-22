@@ -33,12 +33,16 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+// app.use(cors());
 app.use(
   cors({
     origin: "*",
+    origin: [
+      "http://localhost:3001",
+      "http://localhost:8080",
+      "https://content-charm-production.up.railway.app/",
+    ],
     methods: "GET,POST,PUT,PATCH,DELETE,HEAD",
-    preflightContinue: false,
-    optionsSuccessError: 204,
   })
 );
 // app.use(express.static(path.join(__dirname, "public")));
@@ -55,8 +59,6 @@ if (process.env.NODE_ENV === "production") {
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
   });
-} else {
-  app.get("/", (req, res) => res.send("Server is Ready"));
 }
 
 // catch 404 and forward to error handler

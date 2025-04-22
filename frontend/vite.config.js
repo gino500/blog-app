@@ -10,12 +10,20 @@ export default defineConfig({
     },
   },
   plugins: [react()],
+  build: {
+    outDir: "dist",
+  },
   server: {
-    port: process.env.PORT || 8080,
+    port: process.env.PORT || 3000,
+
     proxy: {
       "/api": {
-        target: "blog-app-production-0294.up.railway.app",
+        target: [
+          "https://blog-app-production-40c0.up.railway.app",
+          "http://localhost:3000/",
+        ],
         changeOrigin: true,
+        secure: false,
       },
     },
   },

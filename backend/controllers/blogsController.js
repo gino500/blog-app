@@ -5,9 +5,10 @@ const { validationResult } = require("express-validator");
 const Blog = require("../models/blogs");
 const { text } = require("express");
 
-// GET all blogs
+// // GET all blogs
 exports.blog_list_get = asyncHandler(async (req, res, next) => {
   const allBlogs = await Blog.find({}).sort({ user: 1 });
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
   res.status(200).json({
     success: true,
     message: "Retrieved all blogs",
