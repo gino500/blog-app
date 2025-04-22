@@ -34,7 +34,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 // app.use(cors());
-app.use(cors());
+app.use(
+  cors({
+    origin: "true",
+    origin: [
+      "http://localhost:3001",
+      "http://localhost:8080",
+      "https://blog-app-production-97bd.up.railway.app",
+    ],
+    methods: "GET,POST,PUT,PATCH,DELETE,HEAD",
+  })
+);
 // app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
